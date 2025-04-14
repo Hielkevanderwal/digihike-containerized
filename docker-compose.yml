@@ -11,6 +11,8 @@ services:
       - stack.env
     depends_on:
       - db
+    ports:
+      - "8096:8096"
 
   db:
       image: postgres:14
