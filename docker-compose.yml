@@ -22,7 +22,8 @@ services:
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   nginx:
-    image: nginx:latest
+    build:
+      context: ./nginx
     ports:
       - "8096:80"
     volumes:
