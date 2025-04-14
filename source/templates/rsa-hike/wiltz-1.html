@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="d-flex flex-column my-3">
+    <h1>Route</h1>
+</div>
+{% for section in route_sections %}
+<div class="card my-3">
+    <h5 class="card-header p-3" style="background-color:#ff6a08">{{section.ordering}}. {{section.section_name}}</h5>
+    <div class="card-body">
+        {{ section.section_html | safe }}
+        {% if section.pk in available_hints %}
+        <p class="mb-0 mt-3"><strong>Hint: </strong><em>{{ section.hint }}</em></p>
+        {% endif %}
+    </div>
+</div>
+
+{% endfor %}
+
+{% if display_question %}
+<div id="current" class="card my-3">
+    <h5 class="card-header">Vraag {{question.ordering}}</h5>
+    <div class="card-body">
+        <p>{{ wrong_anwer }}</p>
+        <form method="POST" id="question_form" action="{% url 'hike-main' %}">
+            {% csrf_token %}
+            {{ question.additional_form | safe }}
+        </form>
+        <div class="float-end d-flex mt-2">
+            {% if hint_available and not question.pk in available_hints %}
+            <form class="mx-1" method="POST" action="{% url 'unlock_hint' question.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">
+                    Hint
+                </button>
+            </form>
+            {% endif %}
+            <button type="submit" form="question_form" class="btn btn-primary">Controleren</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

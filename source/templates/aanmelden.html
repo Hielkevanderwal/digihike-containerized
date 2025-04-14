@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block page_content %}
+<div class="card my-3">
+    <h5 class="card-header p-3">Team aanmelden</h5>
+    <div class="card-body">
+
+        <form action="{% url "team_aanmelden" %}" method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+{% endblock %}

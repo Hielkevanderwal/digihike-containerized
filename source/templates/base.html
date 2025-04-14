@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico"/>
+        <title>{% block page_title %}digihike - STAM {% endblock %}</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+
+        {% block styles %}
+        {% endblock %}
+    </head>
+    <body>
+        {% include "nav.html" %}
+        <div class="container-sm" style="max-width: 1000px;">
+            {% block page_content %}
+            <p>Ik hoor hier niet te zijn :)</p>
+            {% endblock %}
+        </div>
+    </body>
+    {% bootstrap_javascript %}
+    {% block scripts %}
+    {% endblock %}
+</html>

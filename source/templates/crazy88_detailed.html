@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block styles %}
+<link href="https://vjs.zencdn.net/7.8.3/video-js.css" rel="stylesheet" />
+{% endblock %}
+
+{% block page_content %}
+<div class="container-sm my-3">
+    <h1>{{ mission }}</h1>
+    <div class="d-flex justify-content-left my-3">
+        <a href="{% url 'crazy88_view-list' mission_list.list_name %}" class="btn btn-primary">Terug</a>
+        {% if show_upload %}
+        <button type="button" class="btn btn-primary float-end mx-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Uploaden
+        </button>
+        {% endif %}
+    </div>
+</div>
+<div style="margin: 0 auto;">
+<div class="row" data-masonry='{"percentPosition": true }' data-masonry-options='{ "isFitWidth": true }'>
+    {% for mission_exe in missione_xecutions %}
+    <div class="card m-3 px-0" style="width: 18rem;">
+        {% if mission_exe.validated %}
+        <span class="badge position-absolute top-0 start-100 translate-middle bg-success rounded-pill">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+            </svg> -->
+            +1
+        </span>
+        {% elif mission_exe.validated == False %}
+        <span class="badge position-absolute top-0 start-100 translate-middle bg-danger rounded-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+            </svg>
+        </span>
+        {% else %}
+        <span class="badge position-absolute top-0 start-100 translate-middle bg-warning text-dark rounded-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-down-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M6.364 2.5a.5.5 0 0 1 .5-.5H13.5A1.5 1.5 0 0 1 15 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 2 13.5V6.864a.5.5 0 1 1 1 0V13.5a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-.5-.5H6.864a.5.5 0 0 1-.5-.5"/>
+                <path fill-rule="evenodd" d="M11 10.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h3.793L1.146 1.854a.5.5 0 1 1 .708-.708L10 9.293V5.5a.5.5 0 0 1 1 0z"/>
+            </svg>
+        </span>
+        {% endif %}
+        <div class="card-header">{{ mission_exe.team.team_name }}</div>
+        {% if mission_exe.is_vid %}
+        <video-js
+            width="720"
+            height="405"
+            controls
+            data-setup='{"playbackRates": [0.5, 1, 1.5, 2], "fluid": true}'>
+            <source src="{{ mission_exe.media.url }}" type="video/mp4">
+            <p class="vjs-no-js">
+            To view this video please enable Javascript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+		</video-js>
+        {% else %}
+        <img src="{{ mission_exe.media.url }}" class="card-img-top" alt="...">
+        {% endif %}
+
+        {% if mission_exe.description != "" %}
+        <div class="card-body">
+            <p class="card-text">{{ mission_exe.description }}</p>
+        </div>
+        {% endif %}
+        <div class="card-footer text-muted">
+            {{ mission_exe.upload_date | date:"j-n-o   G:i" }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Uploaden</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="Upload_form" method="post" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ upload_form|crispy }}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="Upload_form" class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+{% endblock %}

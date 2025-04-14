@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="container">
+    <h1>Het aanmelden is gelukt!</h1>
+    <P>De inloggegevens zijn verstuurd naar {{emails}}. Check je spam! Mocht het niet zijn aangekomen graag even contact opnemen met mij :)</P>
+
+    <a href="{% url 'login' %}" class="btn btn-primary">Verder naar inloggen</a>
+</div>
+{% endblock %}

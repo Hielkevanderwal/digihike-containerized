@@ -1,0 +1,31 @@
+{% load static %}
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand me-2" href="/">
+      <img style="max-width: 60px;" src="{% static 'baow_logo.png' %}">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'crazy88_view' %}">Crazy 88</a>
+        </li>
+      {% endif %}
+      </ul>
+      <div class="d-flex align-items-center">
+        {% if request.user.is_staff %}
+        <a href="/admin" class="btn btn-primary">Admin</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="btn btn-primary">Uitloggen</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">Inloggen</a>
+        <!-- <a href="{% url 'team_aanmelden' %}" class="btn btn-primary">Team aanmelden</a> -->
+        {% endif %}
+    </div>
+    </div>
+  </div>
+</nav>
