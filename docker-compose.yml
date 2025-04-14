@@ -6,7 +6,7 @@ services:
       - static_volume:/app/static
       - media_volume:/app/media
     expose:
-      - "8000"
+      - "8098"
     env_file:
       - stack.env
     depends_on:
@@ -24,7 +24,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "80:80"
+      - "8096:80"
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - static_volume:/app/static/
