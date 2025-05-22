@@ -7,7 +7,7 @@
 <ul class="list-group">
   {% for team in teams %}
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    {{team.team_name}}
+    {{team.team_name}} ({{team.str_team_members}})
     <span class="badge bg-primary rounded-pill">{{team.team_score}}</span>
   </li>
   {% endfor %}
