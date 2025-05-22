@@ -30,3 +30,12 @@ class MissionExecution(models.Model):
         name, extension = os.path.splitext(self.media.name)
         return extension in [".mp4"]
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.validated:
+            self.recalculate_score(self.team)        
+
+    def recalculate_score(self,team):
+        ms = MissionExecution.objects.filter(validated=True, team=team).values('mission_number').distinct().count()
+        team.team_score = ms * 5 + team.team_bonus_score
+        team.save()

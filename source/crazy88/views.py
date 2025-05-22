@@ -8,29 +8,14 @@ from .forms import MissionUploadForm
 
 from random import choice
 
-HOME_SCREEN_RANDOM_MISSIONEXE_ENTRIES = 10
-
 # Create your views here.
 @login_required
 def crazy88_view_home(request):
     active_mission_lists = MissionList.objects.filter(is_active = True)
     
-    if len(active_mission_lists) == 1:
-        return redirect("crazy88_view-list", mission_list = active_mission_lists.first().list_name)
-    
-    mission_exe_pks = MissionExecution.objects.values_list('pk', flat=True)
-    random_objs = []
-
-    # TODO fix getting duplicate mission obj on homescreen
-    while len(random_objs) < HOME_SCREEN_RANDOM_MISSIONEXE_ENTRIES and mission_exe_pks != len(random_objs):
-        random_pk = choice(mission_exe_pks)
-        random_objs.append(MissionExecution.objects.get(pk=random_pk))
- 
-
-
     return render(request, "crazy88_overview.html", context={
-        "mission_lists": active_mission_lists,
-        "random_mission_exe": random_objs,
+        "teams": Team.objects.all().order_by('-team_score'),
+        "recent_me": MissionExecution.objects.order_by("-upload_date")[:10] 
     })
 
 @login_required
@@ -51,10 +36,11 @@ def crazy88_view_list(request, mission_list):
     for mission_exe in mission_executions_list:
         missions[mission_exe.mission_number - 1]["teams_who_did"].append(mission_exe.team)
 
+    print(Team.objects.all()[0].team_description)
 
     return render(request, "crazy88.html", context={
         "mission_list": mission_list_obj.list_name,
-        "missions": missions
+        "missions": missions,
     })
 
 @login_required

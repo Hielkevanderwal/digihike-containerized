@@ -11,7 +11,10 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       {% if request.user.is_authenticated %}
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'crazy88_view' %}">Crazy 88</a>
+            <a class="nav-link" href="{% url 'crazy88_view' %}">Tussenstand</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'crazy88_view-list' 'Stamp' %}">Opdrachten</a>
         </li>
       {% endif %}
       </ul>
